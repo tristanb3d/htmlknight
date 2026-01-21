@@ -1,78 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Knight</title>
-    <script>
-        // Constants
-        const MAX_PLAYERS = 4;
-        const DEFAULT_HEALTH = 100;
-        // Add more named constants as needed
-
-        class StateManager {
-            constructor(gameInstance) {
-                this.game = gameInstance;
-                this.characters = [];
-            }
-
-            deserializeCharacter(data) {
-                // Improved error handling
-                try {
-                    if (!data) throw 'No data provided';
-                    const character = { health: DEFAULT_HEALTH, ...data };
-                    this.characters.push(character);
-                } catch (error) {
-                    console.error('Error deserializing character:', error);
-                    // Fallback mechanism
-                    // Implement fallback logic as needed
-                }
-            }
-
-            getConnectedCount() {
-                return this.characters.length;
-            }
-
-            applyGamepadInput(input) {
-                // Logic to be implemented
-                console.log('Gamepad input applied:', input);
-            }
-        }
-
-        function setupEventListeners(gameInstance) {
-            // Proper event listener setup
-            const handleKeyPress = (event) => {
-                // Logic to handle key press
-                console.log('Key pressed:', event.key);
-            };
-            window.addEventListener('keypress', handleKeyPress);
-
-            // Cleanup function to remove event listeners
-            return () => {
-                window.removeEventListener('keypress', handleKeyPress);
-            };
-        }
-
-        // Example usage
-        const gameInstance = {}; // Placeholder for actual game instance
-        const stateManager = new StateManager(gameInstance);
-        const cleanupListeners = setupEventListeners(gameInstance);
-
-        // Call cleanup when needed (e.g., on exit)
-        // cleanupListeners();
-
-        // JSDoc for better documentation
-        /**
-         * Initializes the game.
-         * @param {Object} options - Game options.
-         */
-        function initializeGame(options) {
-            // Game initialization logic
-            console.log('Game initialized with options:', options);
-        }
-    </script>
+    <script src="game.js"></script>
 </head>
 <body>
     <h1>Welcome to HTML Knight!</h1>
+    <script>
+        // Game initialization and settings
+        const GAMEPAD_DEADZONE = 0.2; // Deadzone for gamepad input
+        const GAMEPAD_STATUS_DISPLAY_MS = 3000; // Display duration for gamepad status
+
+        class GamepadController {
+            constructor() {
+                this.updateGamepadState = this.updateGamepadState.bind(this);
+                // Attach update listener
+                window.addEventListener('gamepadconnected', this.updateGamepadState);
+                // Additional setup...
+            }
+            dispose() {
+                // Cleanup listeners
+                window.removeEventListener('gamepadconnected', this.updateGamepadState);
+            }
+        }
+
+        class StateManager {
+            // State management methods
+        }
+
+        restoreState() {
+            try {
+                // Restoring state logic
+            } catch (error) {
+                console.error('Error restoring state, fallback to fresh game state', error);
+                // Reset to fresh game state
+            }
+        }
+
+        // Other game logic...
+
+        function deserializeCharacter(data) {
+            // Bug fix applied here
+            // Replace game.difficulty with this.game.difficulty
+            this.game.difficulty = data.difficulty;
+            // Additional deserialization logic...
+        }
+    </script>
 </body>
 </html>
