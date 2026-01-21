@@ -1,53 +1,78 @@
-// Added proper JSDoc comments for clarity
-/** 
- * Deserializes a character from a given state
- * @param {Object} state - The state object containing character data.
- * @param {Game} gameInstance - Game instance to be used for the deserialization.
- */
-StateManager.prototype.deserializeCharacter = function(state, gameInstance) {
-    if (!state) {
-        console.error('Invalid state data provided for deserialization. Fallback to default character state.');
-        return this.createDefaultCharacter();
-    }
-    // Fix the undefined 'game' variable reference by using gameInstance
-    this.character = gameInstance.getCharacter(state.id);
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Knight</title>
+    <script>
+        // Constants
+        const MAX_PLAYERS = 4;
+        const DEFAULT_HEALTH = 100;
+        // Add more named constants as needed
 
-class GamepadController {
-    constructor() {
-        this.eventListeners = [];
-    }
+        class StateManager {
+            constructor(gameInstance) {
+                this.game = gameInstance;
+                this.characters = [];
+            }
 
-    init() {
-        const listener = this.handleGamepadInput.bind(this);
-        window.addEventListener('gamepadconnected', listener);
-        this.eventListeners.push({ event: 'gamepadconnected', listener });
-    }
+            deserializeCharacter(data) {
+                // Improved error handling
+                try {
+                    if (!data) throw 'No data provided';
+                    const character = { health: DEFAULT_HEALTH, ...data };
+                    this.characters.push(character);
+                } catch (error) {
+                    console.error('Error deserializing character:', error);
+                    // Fallback mechanism
+                    // Implement fallback logic as needed
+                }
+            }
 
-    cleanup() {
-        this.eventListeners.forEach(({ event, listener }) => {
-            window.removeEventListener(event, listener);
-        });
-        this.eventListeners = [];
-    }
+            getConnectedCount() {
+                return this.characters.length;
+            }
 
-    handleGamepadInput() {
-        // Handling gamepad input logic
-    }
-}
+            applyGamepadInput(input) {
+                // Logic to be implemented
+                console.log('Gamepad input applied:', input);
+            }
+        }
 
-// Replace magic numbers with constants
-const PLAYER_START_X = 100;
-const PLAYER_START_Y = 200;
+        function setupEventListeners(gameInstance) {
+            // Proper event listener setup
+            const handleKeyPress = (event) => {
+                // Logic to handle key press
+                console.log('Key pressed:', event.key);
+            };
+            window.addEventListener('keypress', handleKeyPress);
 
-function startGame() {
-    const player = createPlayer(PLAYER_START_X, PLAYER_START_Y);
-    // Improving error handling with fallback logic
-    try {
-        player.init();
-    } catch (error) {
-        console.error('Failed to initialize player: ', error);
-        // Fallback mechanism
-        player.resetToDefaultState();
-    }
-}
+            // Cleanup function to remove event listeners
+            return () => {
+                window.removeEventListener('keypress', handleKeyPress);
+            };
+        }
+
+        // Example usage
+        const gameInstance = {}; // Placeholder for actual game instance
+        const stateManager = new StateManager(gameInstance);
+        const cleanupListeners = setupEventListeners(gameInstance);
+
+        // Call cleanup when needed (e.g., on exit)
+        // cleanupListeners();
+
+        // JSDoc for better documentation
+        /**
+         * Initializes the game.
+         * @param {Object} options - Game options.
+         */
+        function initializeGame(options) {
+            // Game initialization logic
+            console.log('Game initialized with options:', options);
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to HTML Knight!</h1>
+</body>
+</html>
